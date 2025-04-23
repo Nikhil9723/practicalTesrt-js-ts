@@ -34,16 +34,16 @@ function transformNestedObject(obj, path, transformFn) {
       currentObj = currentObj[key];
     }
    
-    const lastKey = keys[keys.length - 1];
+    const endKey = keys[keys.length - 1];
    
-    if (!(lastKey in currentObj)) {
-      currentObj[lastKey] = undefined;
+    if (!(endKey in currentObj)) {
+      currentObj[endKey] = undefined;
     }
    
-    if (Array.isArray(currentObj[lastKey])) {
-      currentObj[lastKey] = currentObj[lastKey].map(transformFn);
+    if (Array.isArray(currentObj[endKey])) {
+      currentObj[endKey] = currentObj[endKey].map(transformFn);
     } else {
-      currentObj[lastKey] = transformFn(currentObj[lastKey]);
+      currentObj[endKey] = transformFn(currentObj[endKey]);
     }
   }
 
