@@ -17,22 +17,35 @@ const user = {
   hobbies: ["reading", "traveling"],
 };
 
-
-function transformNestedObject(obj, path, func) {
-    if(path === ' ' || path !== "string") {
-        throw new Error("wrong path");
+function transformNestedObject(obj, path, transformFn) {
+    if (!path || typeof path !== "string" || path.includes(" ")) {
+      throw new Error("Invalid path");
     }
-    let key = path.split(".");
-    let currObj = obj[0]
-    for(let i = 1; i<=key.length-1; i++) {
-        if(currObj[key[i]] === 'object') {
-            transformNestedObject(currObj[key[i]],key, func)
-        } else {
-            
-        }
-        currObj = currObj[key[i]];
+   
+    const keys = path.split(".");
+    let currentObj = obj;
+   
+    for (let i = 0; i < keys.length - 1; i++) {
+      const key = keys[i];
+   
+      if (!(key in currentObj)) {
+        currentObj[key] = isNaN(Number(keys[i + 1])) ? {} : [];
+      }
+      currentObj = currentObj[key];
     }
-}
+   
+    const lastKey = keys[keys.length - 1];
+   
+    if (!(lastKey in currentObj)) {
+      currentObj[lastKey] = undefined;
+    }
+   
+    if (Array.isArray(currentObj[lastKey])) {
+      currentObj[lastKey] = currentObj[lastKey].map(transformFn);
+    } else {
+      currentObj[lastKey] = transformFn(currentObj[lastKey]);
+    }
+  }
 
 // Transformation function to capitalize the value
 const capitalize = (value) => value.toUpperCase();
