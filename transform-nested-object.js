@@ -15,6 +15,9 @@ const user = {
     postalCode: "10001",
   },
   hobbies: ["reading", "traveling"],
+  profile: {
+    age: 28
+  }
 };
 
 function transformNestedObject(obj, path, transformFn) {
@@ -47,7 +50,8 @@ function transformNestedObject(obj, path, transformFn) {
     }
   }
 
-// Transformation function to capitalize the value
+try {
+    // Transformation function to capitalize the value
 const capitalize = (value) => value.toUpperCase();
 
 transformNestedObject(user, "address.city", capitalize);
@@ -58,3 +62,7 @@ console.log(user.hobbies); // Expected output: ["READING", "TRAVELING"]
 
 transformNestedObject(user, "profile.age", (val) => val + 5);
 console.log(user.profile.age); // Expected output: 5
+}
+catch(err) {
+    console.log(err);
+}
